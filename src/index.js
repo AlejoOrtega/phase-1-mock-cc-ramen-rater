@@ -74,6 +74,7 @@ const updateValues = (ramen) =>{
 }
 
 const patchRamen = (e) => {
+    e.preventDefault()
     let children = document.getElementById('ramen-menu').children
     let mainRamen = document.getElementById('main-image')
     let ramenId;
@@ -96,11 +97,12 @@ const patchRamen = (e) => {
         },
         body: JSON.stringify(ramen)
     })
-    .then(updateValues(ramen))
+    .then(()=>{
+        e.target.reset()
+        updateValues(ramen)
+    })
     .catch((err)=>console.log(err))
 }
-
-
 
 const createRamen = (e) => {
     let ramen = {
@@ -126,14 +128,9 @@ const createRamen = (e) => {
 }
 
 const submitNewRamen = (e) => {
-    
     e.preventDefault()
-    if(e.target['new-name'].value == ""){
-        patchRamen(e);
-    }else{
-        createRamen(e);
-    }
-    document.getElementById('new-ramen').reset()
+    createRamen(e);
+    e.target.reset()
 }
 
 const deleteRamen = () => {
@@ -159,5 +156,6 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchRamenImages(true)
 
     document.getElementById('new-ramen').addEventListener('submit', submitNewRamen)
+    document.getElementById('edit-ramen').addEventListener('submit', patchRamen)
     document.getElementById('delete-btn').addEventListener('click', deleteRamen)
 })
